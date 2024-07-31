@@ -1,0 +1,25 @@
+.Navbar {
+  .container {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-inline: auto;
+    border-bottom: 1px solid var(--border-color);
+
+    .banner{
+      padding-left: 30px;
+    }
+  }
+  .right-side {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+  }
+  .logout {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.7rem;
+  }
+}
