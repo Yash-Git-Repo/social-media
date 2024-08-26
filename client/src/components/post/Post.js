@@ -1,6 +1,5 @@
 
 import './Post.scss'
-import bgImg from '../../Assets/bg.jpg'
 import Avatar from '../avatar/Avatar'
 import { AiOutlineHeart, AiFillHeart } from 'react-icons/ai'
 import { useDispatch } from 'react-redux'
@@ -17,15 +16,15 @@ function Post({ post }) {
             }),
         )
     }
-
+    
     return (
         <div className='Post'>
             <div className="heading" onClick={() => { navigate(`/profile/${post.owner._id}`) }}>
-                <Avatar />
+                <Avatar src={post?.owner?.avatar?.url} />
                 <h4>{post?.owner?.name}</h4>
             </div>
             <div className="content">
-                <img src={bgImg} alt="bgImg" />
+                <img src={post?.image?.url} alt="bgImg" />
             </div>
             <div className="footer">
                 <div className="like" onClick={handlePostLike}>

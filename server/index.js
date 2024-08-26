@@ -1,9 +1,3 @@
-const cloudinary = require('cloudinary').v2
-cloudinary.config({
-    cloud_name: 'dycowyp2y',
-    api_key: '818267993537876',
-    api_secret: 'imVjnku7c2LxJYy5R5WkYDaXpKg'
-});
 
 const express = require('express')
 
@@ -21,7 +15,8 @@ const dbconnect = require('./dbconnect')
 const authRouter = require('./routers/authRouter')
 const postRouter = require('./routers/postRouter')
 const userRouter = require('./routers/userRouter')
-const demoRouter = require('./routers/demoRouter')
+const demoRouter = require('./routers/demoRouter');
+const fileUpload = require('express-fileupload');
 
 
 const app = express()
@@ -36,6 +31,9 @@ app.use(cors({
     origin: 'http://localhost:3000'
 }
 ))
+app.use(fileUpload({
+    useTempFiles:true
+}))
 
 const PORT = process.env.PORT || 4001
 

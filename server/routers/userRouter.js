@@ -12,6 +12,7 @@ router.get('/getUserPosts', requireUser, userController.getUserPosts)
 router.post('/getUserProfile', requireUser, userController.getUserProfile)
 router.get('/getMyInfo', requireUser, userController.getMyInfo)
 router.put('/updateUserProfile', requireUser, userController.updateUserProfile)
+router.delete('/deleteUserProfile', requireUser, userController.deleteMyProfile)
 
 
 module.exports = router

@@ -1,40 +1,77 @@
 .Post {
   border: 1px solid var(--border-color);
-  margin-top: 20px;
   border-radius: 4px;
+  margin-top: 20px;
+  background-color: #fff;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
   .heading {
     display: flex;
     align-items: center;
-    height: 60px;
-    padding: 20px;
-    gap: 40px;
+    padding: 10px 20px;
+    gap: 15px;
     cursor: pointer;
-  }
-  .content {
-    height: 400px;
-    img {
-      height: 100%;
-      width: 100%;
-      object-fit: cover;
+    background-color: var(--background-light);
+    border-bottom: 1px solid var(--border-color);
+
+    h4 {
+      font-size: 1.1rem;
+      font-weight: 500;
+      color: var(--text-primary);
     }
   }
+
+  .content {
+    width: 100%;
+    max-height: 500px; /* Set a maximum height for the image container */
+    overflow: hidden;
+
+    img {
+      width: 100%;
+      height: auto;
+      max-height: 500px; /* Set a maximum height for the image */
+      object-fit: cover; /* Keep cover for a better visual fit */
+      object-position: center;
+      transition: transform 0.3s ease;
+    }
+  }
+
   .footer {
-    padding: 20px;
+    padding: 15px 20px;
+    background-color: var(--background-light);
+
     .like {
       display: flex;
       align-items: center;
       gap: 10px;
       cursor: pointer;
+      margin-bottom: 10px;
+
+      .icon {
+        font-size: 1.5rem;
+        transition: transform 0.2s ease;
+
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+
+      h4 {
+        font-size: 1rem;
+        color: var(--text-primary);
+      }
     }
-    .icon {
-      font-size: 1.5rem;
+
+    .caption {
+      margin-top: 10px;
+      font-size: 0.95rem;
+      color: var(--text-secondary);
     }
-    .caption{
-        margin-top:12px;
-    }
-    .time-ago{
-        margin-top: 12px;
-        color: #aaa;
+
+    .time-ago {
+      margin-top: 8px;
+      font-size: 0.85rem;
+      color: #aaa;
     }
   }
 }

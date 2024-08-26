@@ -123,53 +123,49 @@ const getUserProfile = async (req, res) => {
 
 const deleteMyProfile = async (req, res) => {
     try {
-        const curUserId = req._id
-        const curUser = await User.findById(curUserId)
+        const curUserId = req._id;
+        const curUser = await User.findById(curUserId);
+        if (!curUser) {
+            return res.status(404).send({ error: 'User not found' });
+        }
 
-        //delete all posts
-        await Posts.deleteMany({
-            owner: curUserId
-        })
+        // Delete all posts by the user
+        await Posts.deleteMany({ owner: curUserId });
 
-        // Remove myself from followers following
-        // curUser.followers.forEach(async (followerId) => {
-        //     const follower = await User.findById(followerId)
-        //     const index = follower.followings.indexOf(curUserId)
-        //     follower.followings.splice(index, 1)
-        //     await follower.save()
-        // })
+        // Remove user from followers' following lists
         for (const followerId of curUser.followers) {
             const follower = await User.findById(followerId);
-            const index = follower.followings.indexOf(curUserId);
-            await follower.followings.splice(index, 1);
-            await follower.save();
+            if (follower) {
+                const index = follower.followings.indexOf(curUserId);
+                if (index !== -1) {
+                    follower.followings.splice(index, 1);
+                    await follower.save();
+                }
+            }
         }
 
-
-        // Remove myself from followings' followers
-        //Another way
-        // curUser.followings.forEach(async (followingsId) => {
-        //     const following = await User.findById(followingsId)
-        //     const index = following.followers.indexOf(curUserId)
-        //     following.followers.splice(index, 1)
-        //     await following.save()
-        // })
+        // Remove user from followings' followers lists
         for (const followingId of curUser.followings) {
             const following = await User.findById(followingId);
-            const index = following.followers.indexOf(curUserId);
-            await following.followers.splice(index, 1);
-            await following.save();
+            if (following) {
+                const index = following.followers.indexOf(curUserId);
+                if (index !== -1) {
+                    following.followers.splice(index, 1);
+                    await following.save();
+                }
+            }
         }
 
-
-
+        // Delete the user
         await User.deleteOne({ _id: curUserId });
 
-        return res.send(success(200, "User deleted successfully"))
+        return res.status(200).send({ message: 'User deleted successfully' });
     } catch (e) {
-        return res.send(error(501, e.message))
+        console.error('Error deleting user:', e);
+        return res.status(500).send({ error: 'Failed to delete user' });
     }
-}
+};
+
 
 const getMyInfo = async (req, res) => {
     try {
