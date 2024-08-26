@@ -1,50 +1,72 @@
-import React, { useState } from 'react'
-import './CreatePost.scss'
-import { BsCardImage } from 'react-icons/bs'
-import { axiosClient } from '../../utils/axiosClient'
-import { useDispatch, useSelector } from 'react-redux'
-import { setLoading } from '../../redux/slices/appConfigSlice'
-import { getUserProfile } from '../../redux/slices/postSlice'
-import Avatar from '../avatar/Avatar'
-import createPostImg from "../../Assets/bg.jpg"
+import React, { useState } from "react";
+import "./CreatePost.scss";
+import { BsCardImage } from "react-icons/bs";
+import { axiosClient } from "../../utils/axiosClient";
+import { useDispatch, useSelector } from "react-redux";
+import { setLoading } from "../../redux/slices/appConfigSlice";
+import { getUserProfile } from "../../redux/slices/postSlice";
+import Avatar from "../avatar/Avatar";
 
 function CreatePost() {
-  const [postImg, setPostImg] = useState('')
-  const [caption, setcaption] = useState('')
-  const dispatch = useDispatch('')
-  const myProfile = useSelector(state => state.appConfigSliceReducer.myProfile)
-
+  const [postImg, setPostImg] = useState("");
+  const [showPostImg, setShowPostImg] = useState("");
+  const [caption, setcaption] = useState("");
+  const dispatch = useDispatch("");
+  const myProfile = useSelector(
+    (state) => state.appConfigSliceReducer.myProfile
+  );
+  
   const handleImageChange = (e) => {
-    const file = e.target.files[0]
-    const fileReader = new FileReader()
-    fileReader.readAsDataURL(file)
+    const file = e.target.files[0];
+
+    if (file) {
+      setPostImg(file);
+    }
+
+    const fileReader = new FileReader();
+    fileReader.readAsDataURL(file);
     fileReader.onload = () => {
       if (fileReader.readyState === fileReader.DONE) {
-        setPostImg(fileReader.result)
+        setShowPostImg(fileReader.result);
       }
-    }
-  }
+    };
+  };
 
   const handlePostSubmit = async () => {
-    try {
-      dispatch(setLoading(true))
-      await axiosClient.post('/post/createPost', {
-        caption,
-        createPostImg,
-      })
-      dispatch(getUserProfile({ userId: myProfile?._id }))
-    } catch (error) {
-    } finally {
-      dispatch(setLoading(false))
-      setcaption('')
-      setPostImg('')
+
+    if (!caption || !postImg) {
+      alert('Caption and image are required');
+      return;
     }
-  }
+
+    try {
+      dispatch(setLoading(true));
+
+      const formData = new FormData();
+      formData.append('caption', caption);
+      formData.append('photo', postImg);
+
+      await axiosClient.post('/post/createPost', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
+
+      dispatch(getUserProfile({ userId: myProfile?._id }));
+    } catch (error) {
+      alert('Failed to create post');
+    } finally {
+      dispatch(setLoading(false));
+      setcaption("");
+      setPostImg("");
+      setShowPostImg("")
+    }
+  };
 
   return (
     <div className="CreatePost">
       <div className="leftPartPost">
-        <Avatar src='' />
+        <Avatar src={myProfile?.avatar?.url} />
       </div>
       <div className="rightPart">
         <input
@@ -54,9 +76,9 @@ function CreatePost() {
           placeholder="What's on your mind ?"
           onChange={(e) => setcaption(e.target.value)}
         />
-        {createPostImg && (
+        {showPostImg && (
           <div className="imgContainer">
-            <img className="postImg" src={createPostImg} alt="Post-Img"></img>
+            <img className="postImg" src={showPostImg} alt="Post-Img"></img>
           </div>
         )}
 
@@ -79,7 +101,7 @@ function CreatePost() {
         </div>
       </div>
     </div>
-  )
+  );
 }
 
-export default CreatePost
+export default CreatePost;

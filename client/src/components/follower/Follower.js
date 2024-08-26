@@ -5,7 +5,8 @@ import { useDispatch, useSelector } from 'react-redux'
 import { followAndUnfollow } from '../../redux/slices/feedSlice'
 import { useNavigate } from 'react-router-dom'
 
-function Follower({user}) {
+function 
+Follower({user}) {
     const navigate = useNavigate()
     const dispatch = useDispatch()
     const feedData = useSelector(state => state.feedSliceReducer.feedData)
@@ -22,7 +23,7 @@ function Follower({user}) {
     return (
         <div className='Follower'>
             <div className="user-info" onClick={() =>{navigate(`/profile/${user?._id}`)}}>
-                <Avatar />
+                <Avatar src={user?.avatar?.url} />
                 <h4 className="name">{user?.name}</h4>
             </div>
             <h5 onClick={handleFollowUnfollow} className={isFollowing ? 'hover-link follow-link' : 'btn-primary'}>{isFollowing ? 'Unfollow' : 'Follow'}</h5>
